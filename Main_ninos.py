@@ -1,3 +1,5 @@
+#peque;o juego para los ninos
+
 import pygame, sys, random
 
    
@@ -9,15 +11,13 @@ class Runner():
         self.position = [x,y]
         self.name = vestidoA
         
-    def avanzar(self):
-        self.position[0] += random.randint(1,6)
         
         
 #----------- CLASS RUNNER -----------------      
 class Game():
     runners = []
-    __posY = (160, 200, 240, 280)
-    __vestidos = ('red','yellow','green','blue')
+    __posY = (180, 260)
+    __vestidos = ('red','yellow')
     __startline = 3
     __finishline = 610
     
@@ -28,10 +28,14 @@ class Game():
         self.background = pygame.image.load("images/background.png")
         
         #Crea los corredores
-        for i in range(4):
-            runnerA = Runner(self.__startline, self.__posY[i],self.__vestidos[i])
-            runnerA.name = self.__vestidos[i]
-            self.runners.append(runnerA)
+        
+        runnerA = Runner(self.__startline, self.__posY[0],self.__vestidos[0])
+        runnerA.name = self.__vestidos[0]
+        self.runners.append(runnerA)
+
+        runnerA = Runner(self.__startline, self.__posY[1],self.__vestidos[1])
+        runnerA.name = self.__vestidos[1]
+        self.runners.append(runnerA)
 
 
     def CloseGame(self):
@@ -50,11 +54,17 @@ class Game():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        self.runners[0].position[0] = self.runners[0].position[0] + 15
+                    if event.key == pygame.K_p:
+                        self.runners[1].position[0] = self.runners[1].position[0] + 15
+                else:
+                    pass
                 
             #modo 1
-            for i in range(len(self.runners)): 
-                self.runners[i].avanzar()
-                
+            for i in range(2): 
+                                
                 if self.runners[i].position[0] >= self.__finishline:
                     print('{} ha ganado'.format(self.runners[i].name))
                     hayGanador = True
@@ -62,11 +72,9 @@ class Game():
             
             self.__screen.blit(self.background, (0,0)) #renderizar la pantalla
             
-            #modo 2
-            for runnerB in self.runners: 
-                self.__screen.blit(runnerB.vestido, runnerB.position)
-            
-            
+            self.__screen.blit(self.runners[0].vestido, self.runners[0].position)
+            self.__screen.blit(self.runners[1].vestido, self.runners[1].position)
+                        
             pygame.display.flip() #refrescar
 
         # cierra el programa una vez finalizada la carrera, cuando se presiona la X
@@ -76,8 +84,7 @@ class Game():
                 if event.type == pygame.QUIT:
                     self.CloseGame()
         
-       
-                      
+                        
         
         
                        
@@ -87,3 +94,6 @@ if __name__ == '__main__':
     pygame.init()
     game = Game()
     game.competir()
+        
+        
+        
